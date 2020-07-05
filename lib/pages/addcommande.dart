@@ -31,6 +31,7 @@ class _AddCommandeState extends State<AddCommande> {
   Services serv;
   int prix = 0;
   bool sechage = false;
+
   List menu = [
     {'id_service': 1, 'nom_service': '5 kg', 'prix_u': 35},
     {'id_service': 2, 'nom_service': '8 kg', 'prix_u': 50},
