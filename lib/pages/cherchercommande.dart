@@ -16,24 +16,41 @@ class _ChercherCommandeState extends State<ChercherCommande> {
   static var commandes = [];
   static List<Commande> listcommandes = [];
 
-  void getdata(int i) async{
-
+  void getdata(int i) async {
+    final response = await http.post(
+        "http://192.168.1.117/landryservice/getallcommande.php",
+        body: {'id_local': i.toString()});
+    var message = jsonDecode(response.body);
+    setState(() {
+      for (var i = 0; i < message.length; i++) {
+        listcommandes.add(Commande(
+            paye: (message[i]['paye'] == 0 ) ? false: true,
+            date: message[i]['date'],
+            sortie: (message[i]['sortie'] == 0 ) ? false : true,
+            id_local: int.parse(message[i]['id_local']),
+            id_user: int.parse(message[i]['id_user']),
+            num_commande: int.parse(message[i]['num_commande']),
+            prix: int.parse(message[i]['prix']),
+            id_client: int.parse(message[i]['id_client'])));
+      }
+    });
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    commandes =[];
+    commandes = [];
+    listcommandes= [];
     getdata(User.curentUser.id_local);
+    commandes = listcommandes ;
   }
-  Datasearch datasearch = Datasearch(list: commandes );
+
+  Datasearch datasearch = Datasearch(list: commandes);
   Commande commande;
+
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -57,37 +74,41 @@ class _ChercherCommandeState extends State<ChercherCommande> {
                 height: 120,
                 width: 150,
                 child: Card(
-                    child: Column(children: <Widget>[
+                  child: Column(
+                    children: <Widget>[
                       Row(
                         children: <Widget>[
                           Icon(Icons.event_note),
                           Text('Num commande : '),
                           Text(commandes[index].num_commande.toString()),
-                          SizedBox(width: 10,),
-                          IconButton(icon: Icon(Icons.publish),onPressed: () async{
-                            print('${commandes[index].num_commande}');
+                          SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.publish),
+                            onPressed: () async {
+                              print('${commandes[index].num_commande}');
 
-                            setState((){
-
-                            });
-
-                          },)
-                          ],
+                              setState(() {});
+                            },
+                          )
+                        ],
                       ),
                       Row(
                         children: <Widget>[
                           Icon(Icons.attach_money),
                           Text('Payer : '),
                           Text(commandes[index].paye.toString()),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                         ],
                       ),
                     ],
-                    ),
+                  ),
                 ),
               );
-            }
-        ),
+            }),
       ),
     );
   }
