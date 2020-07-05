@@ -20,7 +20,7 @@ class _AddCommandeState extends State<AddCommande> {
   TextEditingController prenom_client = TextEditingController();
   TextEditingController num_client = TextEditingController();
 
-  int num_cmd= 1;
+  int num_cmd= 0;
   Client client;
   static List<Client> clientlist = [];
   Datasearch datasearch;
