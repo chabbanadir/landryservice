@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Commande {
   int num_commande;
   int id_user;
@@ -7,10 +9,13 @@ class Commande {
   bool sortie;
   int id_client;
   int id_local;
+  Color color;
 
 
   Commande({this.num_commande, this.id_user, this.prix, this.date, this.paye,
-    this.id_client, this.id_local, this.sortie});
+    this.id_client, this.id_local, this.sortie}){
+    color = Colors.white ;
+  }
 
   Commande.copy(Commande comd){
     this.num_commande = comd.num_commande;

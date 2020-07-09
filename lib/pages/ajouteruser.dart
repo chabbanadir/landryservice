@@ -2,30 +2,35 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:landryservice/classes/client.dart';
+import 'package:landryservice/classes/user.dart';
 
 
-class AjouterClient extends StatefulWidget {
+class AjouterUser extends StatefulWidget {
   @override
-  _AjouterClientState createState() => _AjouterClientState();
+  _AjouterUserState createState() => _AjouterUserState();
 }
 
-class _AjouterClientState extends State<AjouterClient> {
-  TextEditingController nom_client = TextEditingController();
-  TextEditingController prenom_client = TextEditingController();
-  TextEditingController num_client = TextEditingController();
-  TextEditingController mail_client = TextEditingController();
+class _AjouterUserState extends State<AjouterUser> {
+  TextEditingController nom_user = TextEditingController();
+  TextEditingController prenom_user = TextEditingController();
+  TextEditingController cin = TextEditingController();
+  TextEditingController mail = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   bool fidel = false;
   Client client;
+  String admin;
 
   Future<List> newuser() async {
     print ('done');
-    final response = await http.post("http://192.168.1.102/landryservice/insertclient.php", body: {
-      'nom_client': nom_client.text,
-      'prenom_client': prenom_client.text,
-      'num_telephone':num_client.text,
-      'mail_client':mail_client.text,
-      'fidel':fidel.toString(),
+    final response = await http.post("http://192.168.1.102/landryservice/insertuser.php", body: {
+      'nom_user': nom_user.text,
+      'prenom_user': prenom_user.text,
+      'cin':cin.text,
+      'email': mail.text,
+      'status':admin,
+      'id_local' : User.curentUser.id_local.toString(),
+      'password' : password.text,
     });
     var message = jsonDecode(response.body);
     print(response.body);
@@ -37,10 +42,10 @@ class _AjouterClientState extends State<AjouterClient> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text('Ajouter Client'),
+        title: Text('Ajouter User'),
       ),
       body: Container(
-        constraints: BoxConstraints.expand(height: 400.0),
+        constraints: BoxConstraints.expand(height: 700.0),
         padding: EdgeInsets.all(10),
         width: double.infinity,
         height: double.infinity,
@@ -48,7 +53,7 @@ class _AjouterClientState extends State<AjouterClient> {
           child: Column(
             children: <Widget>[
               TextField(
-                controller: nom_client,
+                controller: nom_user,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.contacts),
                   hintText: 'Nom',
@@ -59,7 +64,7 @@ class _AjouterClientState extends State<AjouterClient> {
                 width: double.infinity,
               ),
               TextField(
-                controller: prenom_client,
+                controller: prenom_user,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.contacts),
                   hintText: 'Prenom',
@@ -70,22 +75,32 @@ class _AjouterClientState extends State<AjouterClient> {
                 width: double.infinity,
               ),
               TextField(
-                controller: num_client,
+                controller: cin,
                 decoration: const InputDecoration(
-                  icon: Icon(Icons.phone),
-                  hintText: 'Téléphone',
-                  labelText: 'Téléphone',
+                  icon: Icon(Icons.perm_contact_calendar),
+                  hintText: 'CIN',
+                  labelText: 'CIN',
                 ),
               ),
               Container(
                 width: double.infinity,
               ),
               TextField(
-                controller: mail_client,
+                controller: mail,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.mail),
-                  hintText: 'Mail Client',
-                  labelText: 'Mail Client',
+                  hintText: 'Mail',
+                  labelText: 'Mail',
+                ),
+              ),
+              Container(
+                width: double.infinity,
+              ),TextField(
+                controller: password,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.vpn_key),
+                  hintText: 'Password',
+                  labelText: 'Password',
                 ),
               ),
               Container(
@@ -95,7 +110,7 @@ class _AjouterClientState extends State<AjouterClient> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Text(
-                    'Fidel',
+                    'Admin',
                     style: TextStyle(fontSize: 18),
                   ),
                   Checkbox(
@@ -103,6 +118,8 @@ class _AjouterClientState extends State<AjouterClient> {
                       onChanged: (bool newValue) {
                         setState(() {
                           fidel = newValue;
+                          if (fidel) admin="admin";
+                          else admin = "user";
                         });
                       }),
                 ],
@@ -113,13 +130,9 @@ class _AjouterClientState extends State<AjouterClient> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-
                   RaisedButton(
                     onPressed: ()  {
                       newuser();
-
-//                      await ClientDatabaseProvider.db.newClient(client);
-
                       Navigator.pop(context);
                     },
                     child: Text('Ajouter'),

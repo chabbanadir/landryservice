@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:landryservice/classes/Local.dart';
 import 'package:landryservice/classes/user.dart';
 
 class LogginInterface extends StatefulWidget {
@@ -13,9 +14,18 @@ class _LogginState extends State<LogginInterface> {
   TextEditingController usernames = TextEditingController();
   TextEditingController passwords = TextEditingController();
   User user;
+  Local local;
 
+  Future<List>_Local()async{
+    final response = await http.post("http://192.168.1.102/landryservice/local.php", body: {
+      "id_local" : user.id_local.toString(),
+    });
+    var data = json.decode(response.body);
+    print(data);
+    local = Local.map(data);
+  }
   Future<List>_login() async{
-    final response = await http.post("http://192.168.1.117/landryservice/login.php", body: {
+    final response = await http.post("http://192.168.1.102/landryservice/login.php", body: {
       "username" : usernames.text,
       "password" : passwords.text,
     });
@@ -23,6 +33,7 @@ class _LogginState extends State<LogginInterface> {
     print(data);
     user = User.map(data);
     print(user.toString());
+    await _Local();
     switch(user.status){
       case 'user' :{
         Navigator.pushReplacementNamed(context, '/userinterface',arguments: data);
@@ -48,7 +59,7 @@ class _LogginState extends State<LogginInterface> {
     final logo =  CircleAvatar(
         backgroundColor: Colors.blue,
         radius: 48.0,
-        child: Image.asset(''),
+        child: Image.asset('lib/assets/logo.jpg'),
     );
     final username = TextField(
       controller: usernames,
@@ -74,10 +85,10 @@ class _LogginState extends State<LogginInterface> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        onPressed: () {
+        onPressed: () async{
           print(username);
           print(password);
-           _login();
+           await _login();
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
