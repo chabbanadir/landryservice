@@ -49,6 +49,7 @@ class _AddCommandeState extends State<AddCommande> {
       getallclient();
       Duration(seconds: 2);
       datasearch = Datasearch(list: clientlist );
+      print(clientlist);
     });
   }
 
@@ -379,7 +380,7 @@ class _AddCommandeState extends State<AddCommande> {
                   onPressed: () async{
                    await insertcommande(commande);
                     for(var i=0 ; i< ligneCommandes.length ; i++){
-                      print(num_cmd);
+                      print(commande.paye);
                       ligneCommandes[i].num_commande = num_cmd;
                       await insertligne(ligneCommandes[i]);
                     }
@@ -395,14 +396,14 @@ class _AddCommandeState extends State<AddCommande> {
   }
   Future<List> getallclient() async {
     print ('done');
-    final response = await http.post("http://192.168.1.117/landryservice/getallclient.php");
+    final response = await http.post("http://192.168.1.102/landryservice/getallclient.php");
     var message = jsonDecode(response.body);
     for( var i=0; i<message.length; i++){
       clientlist.add(Client.fromMap2(message[i]));
     }
   }
   Future<List> insertligne(LigneCommande ligneCo) async {
-    final response = await http.post("http://192.168.1.117/landryservice/insertlignecommande.php", body :{
+    final response = await http.post("http://192.168.1.102/landryservice/insertlignecommande.php", body :{
       'reference' : ligneCo.reference,
       'quantite' : ligneCo.quantite.toString(),
       'id_service' : ligneCo.id_service.toString(),
@@ -413,7 +414,7 @@ class _AddCommandeState extends State<AddCommande> {
    print(response.body);
   }
   Future insertcommande(Commande Co) async {
-    final response = await http.post("http://192.168.1.117/landryservice/insertcomande.php", body :{
+    final response = await http.post("http://192.168.1.102/landryservice/insertcomande.php", body :{
       'id_client' : Co.id_client.toString(),
       'prix' : Co.prix.toString(),
       //'num_commande' : Co.num_commande.toString(),
@@ -421,7 +422,7 @@ class _AddCommandeState extends State<AddCommande> {
       'id_local' : Co.id_local.toString(),
       'sortie' : false.toString(),
       'date' : Co.date.toString(),
-      'paye' : false.toString(),
+      'paye' : commande.paye.toString(),
     });
 
     var message = jsonDecode(response.body);

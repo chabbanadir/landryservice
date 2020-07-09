@@ -22,10 +22,10 @@ class LigneCommande {
   factory LigneCommande.fromMap(Map<String, dynamic> json) =>
       LigneCommande(
         reference : json["reference"],
-        num_commande : json["num_commande"],
-        quantite : json["quantite"],
-        id_service : json["id_service"],
-        prix : json["prix"],
+        num_commande : int.parse(json["num_commande"]),
+        quantite : int.parse(json["quantite"]),
+        id_service : int.parse(json["id_service"]),
+        prix : int.parse(json["prix"]),
       );
 
   @override

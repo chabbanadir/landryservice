@@ -20,7 +20,7 @@ class _AjouterClientState extends State<AjouterClient> {
 
   Future<List> newuser() async {
     print ('done');
-    final response = await http.post("http://192.168.1.117/landryservice/insertclient.php", body: {
+    final response = await http.post("http://192.168.1.102/landryservice/insertclient.php", body: {
       'nom_client': nom_client.text,
       'prenom_client': prenom_client.text,
       'num_telephone':num_client.text,
@@ -28,7 +28,7 @@ class _AjouterClientState extends State<AjouterClient> {
       'fidel':fidel.toString(),
     });
     var message = jsonDecode(response.body);
-    print(message);
+    print(response.body);
   }
 
 
@@ -113,19 +113,14 @@ class _AjouterClientState extends State<AjouterClient> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    onPressed: ()async{
 
-                    },
-                    child: Text('delet all client'),
-                  ),
                   RaisedButton(
                     onPressed: ()  {
                       newuser();
 
 //                      await ClientDatabaseProvider.db.newClient(client);
 
-                      //Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     child: Text('Ajouter'),
                   ),

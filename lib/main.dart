@@ -1,6 +1,7 @@
 import'package:flutter/material.dart';
 import 'package:landryservice/pages/addcommande.dart';
 import 'package:landryservice/pages/ajouterclient.dart';
+import 'package:landryservice/pages/ajouteruser.dart';
 import 'package:landryservice/pages/cherchercommande.dart';
 import 'package:landryservice/pages/userInterface.dart';
 import 'package:landryservice/pages/LogginInterface.dart';
@@ -14,6 +15,7 @@ final routes ={
   '/ajouterclient': (BuildContext context ) => new AjouterClient(),
   '/login': (BuildContext context ) => new LogginInterface(),
   '/userinterface': (BuildContext context ) => new UserInterface(),
+  '/ajouteruser': (BuildContext context ) => new AjouterUser(),
   '/admininterface': (BuildContext context ) => new AdminInterface(),
   '/addcommande': (BuildContext context ) => new AddCommande(),
   '/': (BuildContext context ) => new LogginInterface(),
